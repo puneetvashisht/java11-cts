@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class EmployeeTest {
+public class EmployeeTestWithLamdas {
 
 	public static void main(String[] args) {
 		List<Employee> employees = new ArrayList<>();
@@ -23,43 +23,20 @@ public class EmployeeTest {
 		
 //		1. Lamda for sorting Employees by salaries (increasing)
 //		Collections.sort(employees, ___ lamda ____);
-		Collections.sort(employees, new Comparator<Employee>(){
-			@Override
-			public int compare(Employee o1, Employee o2) {
-				return o1.salary.compareTo(o2.salary);
-			}
-			
-		});
+
+		Collections.sort(employees, (e1, e2) -> e1.salary.compareTo(e2.salary));
 //		Sorted List
 		System.out.println("-------- Printing all sorted by salaries --------- ");
-		printAll(employees);
+		printConditionally(employees, (e)-> true);
 //		2. Print each Employee object
 //		3. Print Employee object where first name start with "R"
 		System.out.println("-------- Printing all with name starting with R--------- ");
-		printConditionally(employees, new Condition(){
-			@Override
-			public boolean test(Employee e) {
-				return e.firstName.startsWith("R");
-			}
-			
-		});
+		printConditionally(employees, (e) -> e.firstName.startsWith("R") );
 		
 //		4. Print Employee object where last name start with "R"
 		System.out.println("-------- Printing all with lastname starting with R--------- ");
-		printConditionally(employees, new Condition(){
-			@Override
-			public boolean test(Employee e) {
-				return e.lastName.startsWith("R");
-			}
-			
-		});
+		printConditionally(employees, (e) -> e.lastName.startsWith("R"));
 
-	}
-	
-	static void printAll(List<Employee> employees){
-		for(Employee e: employees){
-			System.out.println(e);
-		}
 	}
 
 	static void printConditionally(List<Employee> employees, Condition condition){
@@ -67,13 +44,7 @@ public class EmployeeTest {
 			if(condition.test(e)) {
 				System.out.println(e);
 			}
-//			if(e.firstName.startsWith("R")){
-//				System.out.println(e);
-//			}
 		}
 	}
 }
-@FunctionalInterface
-interface Condition{
-	boolean test(Employee e);
-}
+
