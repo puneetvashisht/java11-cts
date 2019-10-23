@@ -1,6 +1,7 @@
 package com.cts;
 
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public class BiConsumerDemo {
 	
@@ -8,12 +9,18 @@ public class BiConsumerDemo {
 	public static void main(String[] args) {
 		
 		int [] numbers = { 2,3,4,7,4};
-		int operand = 0;
+		int operand = 2;
 		
+		MyBiConsumer<Integer, Integer> consumer = (x, y) -> System.out.println( x / y);
 		
-//		process(numbers, operand, (x,y) -> System.out.println( x / y));
+//		String s = "Puneet";
 		
-		process(numbers, operand, wrapperLamda((x,y) -> System.out.println( x / y)));
+		Function<String,String> function  = (s)-> s.substring(1, 2);
+//		function.apply(t)
+		
+		process(numbers, operand, consumer);
+		
+//		process(numbers, operand, wrapperLamda((x,y) -> System.out.println( x / y)));
 		
 //		process(numbers, operand, 
 //				(x, y) -> {
@@ -41,10 +48,18 @@ public class BiConsumerDemo {
 		};
 	}
 	
-	private static void process( int [] numbers, int operand, BiConsumer<Integer, Integer> consumer){
+	private static void process( int [] numbers, int operand, MyBiConsumer<Integer, Integer> consumer){
 		for(int n : numbers){
 			consumer.accept(n, operand);
 		}
 	}
 
 }
+
+interface MyBiConsumer<T,U>{
+	void accept(T t, U u);
+}
+
+
+
+
