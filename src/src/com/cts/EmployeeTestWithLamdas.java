@@ -48,6 +48,16 @@ public class EmployeeTestWithLamdas {
 //		4. Print Employee object where last name start with "R"
 		System.out.println("-------- Printing all with lastname starting with R--------- ");
 //		printConditionally(employees, (e) -> e.lastName.startsWith("R"));
+		
+		
+//		5. Streams 
+		System.out.println("------- STREAMS ---------");
+		long totalFilteredEmployees = employees.stream().filter((e) -> e.lastName.startsWith("R")).count();
+//		System.out.println(totalFilteredEmployees);
+		
+		employees.stream().filter((e) -> e.lastName.startsWith("R")).forEach(e -> System.out.println(e));
+		// Method reference
+		employees.stream().filter((e) -> e.lastName.startsWith("R")).forEach(System.out::println);
 
 	}
 
