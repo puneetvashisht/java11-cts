@@ -1,11 +1,13 @@
 package com.cts;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.htmlcleaner.HtmlCleaner;
 
@@ -18,11 +20,9 @@ import org.htmlcleaner.HtmlCleaner;
  *  Consumer & Supplier
  *  Show API too (including primitive functional interfaces) !!
  *  
- *  Method References
- *  TODO: Constructor References
  *
  */
-public class FunctionalInterfaceDemo {
+public class FunctionalInterfaceDemo2 {
 	
 	public static void main(String[] args) {
 		
@@ -33,32 +33,55 @@ public class FunctionalInterfaceDemo {
 		
 		List<String> documents = new ArrayList<>(Arrays.asList(doc1, doc2, doc3, doc4));
 		
-
+		List<String> targetDocuments = new ArrayList<>();
 		
-		for(String doc : documents){
-//			1. Filter documents with word  "streams"
-			
-			BiFunction<String, String, Boolean> biFunction = (d, c) -> d.contains(c);
-			boolean isTargetDoc = biFunction.apply(doc, "stream");
-//			boolean isTargetDoc  = filter(doc, d -> d.contains("stream"));
-			if(isTargetDoc){
-//				2. Strip Html Tags			
-//				doc = transform(doc, d -> Indexer.stripHtmlTags(d));
-				Function<String, String> htmlCleaner = d -> Indexer.stripHtmlTags(d);
-				doc  = transform(doc, htmlCleaner);
+		for (String doc : documents) {
+				//boolean isTargetDoc = filter(doc, d -> d.contains("stream"));
+			    			    
+			    BiFunction<String, String, Boolean> biFunction = (d, c) -> d.contains(c);
+			    
+			    if (biFunction.apply(doc, "stream")) {
+				    //doc = transform(doc, d -> Indexer.stripHtmlTags(d));
+					//doc = transform(doc, d -> Indexer.removeStopwords(d));
+					
+			    	
+			    	
+					Function<String, String> htmlCleaner = d -> Indexer.stripHtmlTags(d);
+					//doc = transform(doc, htmlCleaner);
+					
+					Function<String, String> stopwordRemover = d -> Indexer.removeStopwords(d);
+					//stopwordRemover.apply(doc);
+					
+					Function<String, String> docProcessor = htmlCleaner.andThen(stopwordRemover);
+					doc = transform(doc, docProcessor);
+					
+					//System.out.println(doc);
+					
+					targetDocuments.add(doc);
+				}							
 				
-//				3. Remove Stop Words ("of", "the", "a", "is", "to", "in", "and")
-//				doc = transform(doc, d-> Indexer.removeStopwords(d));
-				Function<String, String> stopWordRemover = d -> Indexer.removeStopwords(d);
-				doc  = transform(doc, stopWordRemover);
-				
-				System.out.println(doc);
+		}
+		
+		targetDocuments.forEach(d -> System.out.println(d));
+		
+		for (String doc : targetDocuments) {
+			try {
+				if (doc.length() > 80) {
+					throw new Exception("Oversized document!!!");
+				}
+			} catch (Exception e) {
+				print(() -> e.getMessage() + " ~ " + doc);
 			}
 		}
-
-
 		
 	}	
+	
+	private static boolean errorFlag = true;
+	private static void print(Supplier<String> supplier) {
+		if (errorFlag) {
+			System.out.println(supplier.get());
+		}
+	}
 	
 	static boolean filter(String doc, Predicate<String> filter) {
 		return filter.test(doc);
@@ -73,24 +96,5 @@ public class FunctionalInterfaceDemo {
 	
 }
 
-class Indexer {
-	
-	private static List<String> stopWords = Arrays.asList("of", "the", "a", "is", "to", "in", "and");
-	
-	static String stripHtmlTags(String doc) {
-		return new HtmlCleaner().clean(doc).getText().toString();
-	}
-	
-	static String removeStopwords(String doc) {
-		
-		StringBuilder sb = new StringBuilder();
-		for (String word : doc.split(" ")) {
-			if (!stopWords.contains(word))
-				sb.append(word).append(" ");
-		}
-		
-		return sb.toString();
-	}	
-	
-}
+
 

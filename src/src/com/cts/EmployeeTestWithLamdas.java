@@ -19,7 +19,19 @@ public class EmployeeTestWithLamdas {
 		employees.add(emp3);
 		employees.add(emp4);
 		
-		System.out.println(employees);
+//		System.out.println(employees);
+		
+//		1. For in loop
+		System.out.println("---- For In  -----");
+		for(Employee e: employees){
+				System.out.println(e);
+		}
+		
+//		2. For each loop
+		System.out.println("---- For each  -----");
+		employees.forEach((e)-> System.out.println(e));	
+		System.out.println("---- For each with Method References  -----");
+		employees.forEach(System.out :: println);
 		
 //		1. Lamda for sorting Employees by salaries (increasing)
 //		Collections.sort(employees, ___ lamda ____);
@@ -27,15 +39,15 @@ public class EmployeeTestWithLamdas {
 		Collections.sort(employees, (e1, e2) -> e1.salary.compareTo(e2.salary));
 //		Sorted List
 		System.out.println("-------- Printing all sorted by salaries --------- ");
-		printConditionally(employees, (e)-> true);
+//		printConditionally(employees, (e)-> true);
 //		2. Print each Employee object
 //		3. Print Employee object where first name start with "R"
 		System.out.println("-------- Printing all with name starting with R--------- ");
-		printConditionally(employees, (e) -> e.firstName.startsWith("R") );
+//		printConditionally(employees, (e) -> e.firstName.startsWith("R") );
 		
 //		4. Print Employee object where last name start with "R"
 		System.out.println("-------- Printing all with lastname starting with R--------- ");
-		printConditionally(employees, (e) -> e.lastName.startsWith("R"));
+//		printConditionally(employees, (e) -> e.lastName.startsWith("R"));
 
 	}
 
