@@ -2,7 +2,11 @@ package com.cts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.SynchronousQueue;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -10,7 +14,7 @@ import java.util.stream.Stream;
 
 public class StreamOperations {
 	
-	static class Book {		
+	static class Book implements Comparable<Book>{		
 		private long isbn;
 		private String title;	
 		private double rating;
@@ -71,6 +75,11 @@ public class StreamOperations {
 		public String toString() {
 			return "Book [isbn=" + isbn + ", title=" + title + ", rating=" + rating + ", price=" + price + ", source="
 					+ source + "]";
+		}
+
+		@Override
+		public int compareTo(Book o) {
+			return this.title.compareTo(o.title);
 		}
 		
 	}	
@@ -183,35 +192,67 @@ public class StreamOperations {
 		}
 		//Find the lowest priced book with a rating > 4.5
 		private static void reduce(List<Book> books){
-			books.stream()
+			books.parallelStream()
 			.filter(b-> b.getRating() >= 4.5)
 			.reduce((b1,b2) -> b1.getPrice() <= b2.getPrice() ?b1:b2)
 			.ifPresent(System.out::println);
-			
-//			if(result.isPresent()){
-//				System.out.println(result.get());
-//			}
-//			else{
-//				System.out.println("No record found!!");
-//			}
+		}
+		// Limitations:
+//		1. Cumbersome
+//		2. Parallelizing is painful
+		private static void reduceImperatively(List<Book> books){
+			Book result = null;
+			for(Book book : books){
+				if(result == null){
+					if(book.getRating()  >= 4.5){
+						result = book;
+					}
+					continue;
+				}
+				
+				if(book.getRating()  >= 4.5 && result.getPrice() > book.getPrice()){
+					result = book;
+				}
+			}
+			System.out.println("result: " + result);
 		}
 		
-//		private static void reduce(List<Book> books){
-//			Book result = null;
-//			for(Book book : books){
-//				if(result == null){
-//					if(book.getRating()  >= 4.5){
-//						result = book;
-//					}
-//					continue;
-//				}
-//				
-//				if(book.getRating()  >= 4.5 && result.getPrice() > book.getPrice()){
-//					result = book;
-//				}
-//			}
-//		}
+		// Print DISTINCT books with rating >= 4.5
+		private static void collectToCollection(List<Book> books){
+			List<Book> list1 = books.stream()
+			.filter(b -> b.getRating() >=4.5)
+			.distinct()
+//			.collect(Collectors.toList());
+			.collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+			System.out.println(list1.size());
+			
+			Set<Book> set2 = books.stream()
+			.filter(b -> b.getRating() >=4.5)
+			// This is not going to be needed sets only allow unique
+//			.distinct()
+			.collect(Collectors.toSet());
+			System.out.println(set2.size());
+			
+			TreeSet<Book> set3 = books.stream()
+			.filter(b -> b.getRating() >=4.5)
+			.collect(Collectors.toCollection(() -> new TreeSet()));
+			
+			System.out.println(set3.size());
+			set3.forEach(System.out::println);
+		}
 		
+		
+		private static void collectToMap(List<Book> books){
+			Map<Long, Book> bookMap = books.stream()
+			.collect(Collectors.toMap(b->b.getIsbn(), b->b));
+			
+			for(Entry<Long,Book> entry: bookMap.entrySet()){
+				System.out.println("isbn: " + entry.getKey() + " - book" + entry.getValue());
+			}
+			
+			
+			//Get a treeMap
+		}
 	
 	public static void main(String[] args) {
 		
@@ -223,7 +264,9 @@ public class StreamOperations {
 //		slice(books);	
 //		match(books);
 //		find(books);
-		reduce(books);
+//		reduceImperatively(books);
+//		reduce(books);
+		collectToCollection(books);
 	}
 	
 	
