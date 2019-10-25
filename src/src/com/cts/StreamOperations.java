@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.SynchronousQueue;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -246,9 +248,17 @@ public class StreamOperations {
 			Map<Long, Book> bookMap = books.stream()
 			.collect(Collectors.toMap(b->b.getIsbn(), b->b));
 			
-			for(Entry<Long,Book> entry: bookMap.entrySet()){
-				System.out.println("isbn: " + entry.getKey() + " - book" + entry.getValue());
-			}
+//			for(Entry<Long,Book> entry: bookMap.entrySet()){
+//				System.out.println("isbn: " + entry.getKey() + " - book" + entry.getValue());
+//			}
+			
+			
+			Map<Long, Book> treeMap = books.stream()
+					.collect(Collectors.toMap(Book::getIsbn, Function.identity(),(b1,b2)-> b1.getPrice() <= b2.getPrice()?b1:b2, ()->new TreeMap() ));
+					
+					for(Entry<Long,Book> entry: treeMap.entrySet()){
+						System.out.println("isbn: " + entry.getKey() + " - book" + entry.getValue());
+					}
 			
 			
 			//Get a treeMap
