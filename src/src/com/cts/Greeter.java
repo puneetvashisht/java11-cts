@@ -1,6 +1,6 @@
 package com.cts;
 
-import org.omg.Messaging.SyncScopeHelper;
+
 
 public class Greeter {
 	
@@ -15,7 +15,8 @@ public class Greeter {
 	public static void main(String[] args) {
 		Greeter greeter  = new Greeter();
 		Greeting greeting = new HelloInEnglishGreeting();
-		
+//		Interface implementation
+		greeter.greet(greeting);	
 		
 		
 		
@@ -25,8 +26,7 @@ public class Greeter {
 		
 //		Runnable r = ()-> System.out.print("In a thread");
 		Thread t = new Thread();
-//		Interface implementation
-		greeter.greet(greeting);
+
 		
 //		Anonymous class
 //		System.out.println(this);
