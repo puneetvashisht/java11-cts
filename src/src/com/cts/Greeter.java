@@ -1,6 +1,6 @@
 package com.cts;
 
-import org.omg.Messaging.SyncScopeHelper;
+
 
 public class Greeter {
 	

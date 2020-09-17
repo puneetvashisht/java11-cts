@@ -23,19 +23,26 @@ public class StreamsDemo {
 		System.out.println("Imperative: \n");
 		
 		for (String doc : documents) {
-			
+			// 1. check if the documents contains "stream"
 			Predicate<String> filter = d -> d.contains("stream");
 			
-			if (filter.test(doc)) {				
+			if (filter.test(doc)) {		
+				// 2. strip html tag <h1>
 				Function<String, String> htmlCleaner = Indexer::stripHtmlTags;
 				doc = htmlCleaner.apply(doc);				
-				
+//				3. Remove stopwords (is, of, the)
 				Function<String, String> stopwordRemover = Indexer::removeStopwords;
 				doc = stopwordRemover.apply(doc);
 				
 				System.out.println(doc);				
 			}
 		}
+		
+		documents.parallelStream()
+		.filter(d -> d.contains("stream"))
+		.map(Indexer::stripHtmlTags)
+		.map(Indexer::removeStopwords)
+		.forEach(System.out::println);
 	}
 	
 	private static void declarative() {
@@ -48,8 +55,15 @@ public class StreamsDemo {
 		     (c) terminal operation (~ column names) -- eager 
 		              & return NON-STREAM. Terminates (closes) a stream
 		*/		
+//		select count(*) from employees e where e.salary > ? 
 		
-		documents.parallelStream()
+//		for(Employee e : employees){
+//			if(e.salary > ?){
+//				count++
+//			}
+//		}
+		
+		documents.stream()
 		.filter(d -> d.contains("stream"))
 		.map(Indexer::stripHtmlTags)
 		.map(Indexer::removeStopwords)
