@@ -12,13 +12,14 @@ public class BiConsumerDemo {
 		int operand = 2;
 		
 		MyBiConsumer<Integer, Integer> consumer = (x, y) -> System.out.println( x / y);
+		consumer.accept(7, 2);
 		
 //		String s = "Puneet";
 		
 		Function<String,String> function  = (s)-> s.substring(1, 2);
 //		function.apply(t)
 		
-		process(numbers, operand, consumer);
+//		process(numbers, operand, consumer);
 		
 //		process(numbers, operand, wrapperLamda((x,y) -> System.out.println( x / y)));
 		

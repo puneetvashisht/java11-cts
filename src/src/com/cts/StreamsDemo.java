@@ -63,6 +63,13 @@ public class StreamsDemo {
 //			}
 //		}
 		
+		//A stream does not store data and, in that sense, is not a data structure. It also never modifies the underlying data source.
+//		Java 8 added a new stream() method to the Collection interface.
+//		forEach() is a terminal operation,peek() is an intermediate operation:
+//		Collectors are used to combine the result of processing on the elements of a stream. Collectors can be used to return a list or a string.
+		
+//		A stream pipeline consists of a stream source, followed by zero or more intermediate operations, and a terminal operation.
+		
 		documents.stream()
 		.filter(d -> d.contains("stream"))
 		.map(Indexer::stripHtmlTags)

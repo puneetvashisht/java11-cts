@@ -1,5 +1,6 @@
 package com.cts;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,12 +41,14 @@ public class FunctionalInterfaceDemo {
 			
 			BiFunction<String, String, Boolean> biFunction = (d, c) -> d.contains(c);
 			boolean isTargetDoc = biFunction.apply(doc, "stream");
+			System.out.println(isTargetDoc);
 //			boolean isTargetDoc  = filter(doc, d -> d.contains("stream"));
 			if(isTargetDoc){
 //				2. Strip Html Tags			
 //				doc = transform(doc, d -> Indexer.stripHtmlTags(d));
 				Function<String, String> htmlCleaner = d -> Indexer.stripHtmlTags(d);
 				doc  = transform(doc, htmlCleaner);
+				System.out.println(doc);
 				
 //				3. Remove Stop Words ("of", "the", "a", "is", "to", "in", "and")
 //				doc = transform(doc, d-> Indexer.removeStopwords(d));
@@ -78,7 +81,14 @@ class Indexer {
 	private static List<String> stopWords = Arrays.asList("of", "the", "a", "is", "to", "in", "and");
 	
 	static String stripHtmlTags(String doc) {
-		return new HtmlCleaner().clean(doc).getText().toString();
+		String newString = "";
+		try {
+			 newString = new HtmlCleaner().clean(doc).getText().toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return newString;
 	}
 	
 	static String removeStopwords(String doc) {

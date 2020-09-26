@@ -39,15 +39,15 @@ public class EmployeeTestWithLamdas {
 		Collections.sort(employees, (e1, e2) -> e1.salary.compareTo(e2.salary));
 //		Sorted List
 		System.out.println("-------- Printing all sorted by salaries --------- ");
-//		printConditionally(employees, (e)-> true);
+		printConditionally(employees, (e)-> true);
 //		2. Print each Employee object
 //		3. Print Employee object where first name start with "R"
 		System.out.println("-------- Printing all with name starting with R--------- ");
-//		printConditionally(employees, (e) -> e.firstName.startsWith("R") );
+		printConditionally(employees, (e) -> e.firstName.startsWith("R") );
 		
 //		4. Print Employee object where last name start with "R"
 		System.out.println("-------- Printing all with lastname starting with R--------- ");
-//		printConditionally(employees, (e) -> e.lastName.startsWith("R"));
+		printConditionally(employees, (e) -> e.lastName.startsWith("R"));
 		
 		
 //		5. Streams 

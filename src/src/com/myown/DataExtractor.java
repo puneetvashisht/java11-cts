@@ -1,10 +1,9 @@
-package com.cts;
+package com.myown;
 
 import java.util.Arrays;
 import java.util.List;
 
-import com.cts.StreamOperations.Book;
-
+import com.myown.StreamsDemo.Book;
 
 
 public class DataExtractor {
@@ -24,7 +23,7 @@ public class DataExtractor {
 		return Arrays.asList(b1, b2, b3, b4, b5, b6, b7, b7, b8, b9, b10);
 	}
 	
-	static List<Book> getFromBarnesAndNoble(String keyword) {
+	public static List<Book> getFromBarnesAndNoble(String keyword) {
 		Book b1 = new Book(9780596009201L, "Java 1", 3.9, 20.0, "B&N");
 		Book b2 = new Book(9780596009202L, "Java 2", 4.1, 20.0, "B&N");
 		Book b3 = new Book(9780596009203L, "Java 3", 4.6, 20.0, "B&N");
